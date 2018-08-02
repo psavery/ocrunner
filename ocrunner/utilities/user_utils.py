@@ -1,5 +1,6 @@
 """User utility functions for communicating with girder."""
 
+
 class UserUtils:
     """Utility functions for performing user operations on girder."""
 

@@ -4,6 +4,7 @@ from girder_client import HttpError
 
 import sys
 
+
 class ClustersUtils:
     """Utility functions for sending clusters requests to girder."""
 
