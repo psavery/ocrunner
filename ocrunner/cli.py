@@ -61,19 +61,20 @@ def getClient(apiUrl, apiKey):
              context_settings=dict(help_option_names=['-h', '--help']))
 @click.option(
     '--api-url',
-    help='The girder api url. May also set OCRUNNER_API_URL environment variable.')
+    help=('The girder api url. May also set OCRUNNER_API_URL environment '
+          'variable.'))
 @click.option(
     '--api-key',
-    help='The girder api key. May also set OCRUNNER_API_KEY environment variable.')
+    help=('The girder api key. May also set OCRUNNER_API_KEY environment '
+          'variable.'))
 @click.pass_context
 def main(ctx, api_url, api_key):
     gc = getClient(api_url, api_key)
     ctx.obj = dict()
     ctx.obj['gc'] = gc
 
+
 # Cluster command
-
-
 @main.group(
     'cluster',
     short_help='Get information about the cluster.',
