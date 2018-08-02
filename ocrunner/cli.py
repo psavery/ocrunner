@@ -77,13 +77,13 @@ def cluster(ctx):
 def cluster_ls(ctx):
   gc = ctx.obj['gc']
   clustersList = ClustersUtils(gc).clusters()
-  print('=' * 59)
-  print('{:30s} {:12s} {:15s}'.format('host', 'status', 'user'))
-  print('=' * 59)
+  print('=' * 44)
+  print('{:15s} {:12s} {:15s}'.format('host', 'status', 'user'))
+  print('=' * 44)
   for cluster in clustersList:
       userId = cluster['userId']
       user = UserUtils(gc).getUserLogin(userId)
-      print('{:30s} {:12s} {:15s}'.format(cluster['config']['host'], cluster['status'],
+      print('{:15s} {:12s} {:15s}'.format(cluster['config']['host'], cluster['status'],
                                           user))
 
 
