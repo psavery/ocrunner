@@ -16,7 +16,7 @@ install_reqs = [
 
 init = os.path.join(
     os.path.dirname(__file__),
-    'ocrun',
+    'ocrunner',
     '__init__.py')
 with open(init) as fd:
     version = re.search(
@@ -25,13 +25,13 @@ with open(init) as fd:
 
 # perform the install
 setup(
-    name='ocrun',
+    name='ocrunner',
     version=version,
     description='Perform Open Chemistry calculations on a cluster.',
     #    long_description=readme,
     author='Patrick Avery',
     author_email='psavery@buffalo.edu',
-    url='http://github.com/psavery/ocrun',
+    url='http://github.com/psavery/ocrunner',
     #    license='Apache 2.0',
     classifiers=[
         #        'Development Status :: 3 - Alpha',
@@ -46,7 +46,7 @@ setup(
     zip_safe=False,
     entry_points={
         'console_scripts': [
-            'ocrun = ocrun.cli:main'
+            'ocrunner = ocrunner.cli:main'
         ]
     }
 )

@@ -2,7 +2,7 @@ import click
 import os
 import subprocess
 
-@click.group(help='ocrun',
+@click.group(help='ocrunner',
              context_settings=dict(help_option_names=['-h', '--help']))
 def main():
   pass
