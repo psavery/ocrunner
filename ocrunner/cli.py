@@ -76,11 +76,11 @@ def main(ctx, api_url, api_key):
 
 # Cluster command
 @main.group(
-    'cluster',
-    short_help='Get information about the cluster.',
-    help='Get information about the cluster.')
+    'clusters',
+    short_help='Get information about the clusters.',
+    help='Get information about the clusters.')
 @click.pass_context
-def cluster(ctx):
+def clusters(ctx):
     pass
 
 
@@ -89,23 +89,24 @@ def cluster(ctx):
     short_help='List available clusters.',
     help='List available clusters.')
 @click.pass_context
-def cluster_ls(ctx):
+def clusters_ls(ctx):
     gc = ctx.obj['gc']
     clustersList = ClustersUtils(gc).clusters()
-    print('=' * 44)
-    print('{:15s} {:12s} {:15s}'.format('host', 'status', 'user'))
-    print('=' * 44)
+    print('=' * 72)
+    print('{:15s} {:28s} {:12s} {:15s}'.format('host', 'id', 'status', 'user'))
+    print('=' * 72)
     for cluster in clustersList:
         userId = cluster['userId']
         user = UserUtils(gc).getUserLogin(userId)
         print(
-            '{:15s} {:12s} {:15s}'.format(
+            '{:15s} {:28s} {:12s} {:15s}'.format(
                 cluster['config']['host'],
+                cluster['_id'],
                 cluster['status'],
                 user))
 
 
-cluster.add_command(cluster_ls)
+clusters.add_command(clusters_ls)
 
 
 # Jobs command
