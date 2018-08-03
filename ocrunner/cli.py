@@ -6,6 +6,7 @@ import girder_client
 from girder_client import HttpError
 
 from ocrunner.utilities.clusters_utils import ClustersUtils
+from ocrunner.utilities.taskflows_utils import TaskflowsUtils
 from ocrunner.utilities.user_utils import UserUtils
 from ocrunner.utilities.progress_bar import progress_bar
 
