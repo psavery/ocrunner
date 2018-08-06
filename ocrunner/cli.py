@@ -180,7 +180,11 @@ taskflows.add_command(taskflows_create)
 @click.argument('taskflowId')
 @click.pass_context
 def taskflows_start(ctx, taskflowid):
-    print('taskflows start called!')
+
+    gc = ctx.obj['gc']
+
+    print('Starting task flow:', taskflowid)
+    resp = TaskflowsUtils(gc).startTaskflow(taskflowid)
 
 taskflows.add_command(taskflows_start)
 
@@ -191,7 +195,11 @@ taskflows.add_command(taskflows_start)
 @click.argument('taskflowId')
 @click.pass_context
 def taskflows_terminate(ctx, taskflowid):
-    print('taskflows terminate called!')
+
+    gc = ctx.obj['gc']
+
+    print('Terminating task flow:', taskflowid)
+    resp = TaskflowsUtils(gc).terminateTaskflow(taskflowid)
 
 taskflows.add_command(taskflows_terminate)
 
@@ -202,7 +210,11 @@ taskflows.add_command(taskflows_terminate)
 @click.argument('taskflowId')
 @click.pass_context
 def taskflows_delete(ctx, taskflowid):
-    print('taskflows delete called!')
+
+    gc = ctx.obj['gc']
+
+    print('Deleting task flow:', taskflowid)
+    resp = TaskflowsUtils(gc).deleteTaskflow(taskflowid)
 
 taskflows.add_command(taskflows_delete)
 
@@ -213,9 +225,36 @@ taskflows.add_command(taskflows_delete)
 @click.argument('taskflowId')
 @click.pass_context
 def taskflows_log(ctx, taskflowid):
-    print('taskflows log called!')
+
+    gc = ctx.obj['gc']
+
+    logCount = 1
+    print('**** Printing log for taskflow', taskflowid, '****')
+    resp = TaskflowsUtils(gc).log(taskflowid)
+    for log in resp:
+        print('*** Log entry:', logCount, '***')
+        for entry in log.keys():
+            print(entry, ":", log[entry])
+        logCount += 1
+    print('**** Done printing log ****')
 
 taskflows.add_command(taskflows_log)
+
+@click.command(
+    'status',
+    short_help='Get the status of a taskflow with a given id.',
+    help='Get the status of a taskflow with a given id.')
+@click.argument('taskflowId')
+@click.pass_context
+def taskflows_status(ctx, taskflowid):
+
+    gc = ctx.obj['gc']
+
+    status = TaskflowsUtils(gc).status(taskflowid)
+    print('taskflow:', taskflowid)
+    print('status:', status)
+
+taskflows.add_command(taskflows_status)
 
 if __name__ == '__main__':
     main()
