@@ -1,4 +1,5 @@
 import click
+import json
 import os
 import sys
 
@@ -148,8 +149,73 @@ def taskflows(ctx):
 def taskflows_ls(ctx):
     print('taskflows ls called!')
 
-
 taskflows.add_command(taskflows_ls)
+
+@click.command(
+    'create',
+    short_help='Create a taskflow from an input json file.',
+    help='Create a taskflow from an input json file.')
+@click.argument('inputJsonFile')
+@click.pass_context
+def taskflows_create(ctx, inputjsonfile):
+
+    gc = ctx.obj['gc']
+
+    # Read the input file
+    with open(inputjsonfile, 'r') as rf:
+        body = json.load(rf)
+
+    resp = TaskflowsUtils(gc).createTaskflow(body)
+
+    print('Taskflow created')
+    print('id:', resp.get('_id'))
+    print('status:', resp.get('status'))
+
+taskflows.add_command(taskflows_create)
+
+@click.command(
+    'start',
+    short_help='Start a taskflow with a given id.',
+    help='Start a taskflow with a given id.')
+@click.argument('taskflowId')
+@click.pass_context
+def taskflows_start(ctx, taskflowid):
+    print('taskflows start called!')
+
+taskflows.add_command(taskflows_start)
+
+@click.command(
+    'terminate',
+    short_help='Terminate a taskflow with a given id.',
+    help='Terminate a taskflow with a given id.')
+@click.argument('taskflowId')
+@click.pass_context
+def taskflows_terminate(ctx, taskflowid):
+    print('taskflows terminate called!')
+
+taskflows.add_command(taskflows_terminate)
+
+@click.command(
+    'delete',
+    short_help='Delete a taskflow with a given id.',
+    help='Delete a taskflow with a given id.')
+@click.argument('taskflowId')
+@click.pass_context
+def taskflows_delete(ctx, taskflowid):
+    print('taskflows delete called!')
+
+taskflows.add_command(taskflows_delete)
+
+@click.command(
+    'log',
+    short_help='Get the log of a taskflow with a given id.',
+    help='Get the log of a taskflow with a given id.')
+@click.argument('taskflowId')
+@click.pass_context
+def taskflows_log(ctx, taskflowid):
+    print('taskflows log called!')
+
+taskflows.add_command(taskflows_log)
 
 if __name__ == '__main__':
     main()

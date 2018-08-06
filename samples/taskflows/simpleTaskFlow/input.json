@@ -1,0 +1,3 @@
+{
+  "taskFlowClass": "cumulus.taskflow.core.test.mytaskflows.SimpleTaskFlow"
+}

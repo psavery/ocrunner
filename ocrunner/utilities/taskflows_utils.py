@@ -1,5 +1,7 @@
 """Send "taskflows" requests to girder."""
 
+import json
+
 
 class TaskflowsUtils:
     """Utility functions for sending taskflows requests to girder."""
@@ -16,8 +18,8 @@ class TaskflowsUtils:
 
     def createTaskflow(self, body):
         """Create a taskflow with a given body."""
-        params = {'body': body}
-        return self.gc.post(TaskflowsUtils.TASKFLOWS_CREATE_PATH, parameters=params)
+        return self.gc.post(TaskflowsUtils.TASKFLOWS_CREATE_PATH,
+                            data=json.dumps(body))
 
     def getTaskflow(self, taskflowId):
         """Get a taskflow from its id."""
