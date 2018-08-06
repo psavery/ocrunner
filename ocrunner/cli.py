@@ -149,7 +149,9 @@ def taskflows(ctx):
 def taskflows_ls(ctx):
     print('taskflows ls called!')
 
+
 taskflows.add_command(taskflows_ls)
+
 
 @click.command(
     'create',
@@ -171,7 +173,9 @@ def taskflows_create(ctx, inputjsonfile):
     print('id:', resp.get('_id'))
     print('status:', resp.get('status'))
 
+
 taskflows.add_command(taskflows_create)
+
 
 @click.command(
     'start',
@@ -186,7 +190,9 @@ def taskflows_start(ctx, taskflowid):
     print('Starting task flow:', taskflowid)
     resp = TaskflowsUtils(gc).startTaskflow(taskflowid)
 
+
 taskflows.add_command(taskflows_start)
+
 
 @click.command(
     'terminate',
@@ -201,7 +207,9 @@ def taskflows_terminate(ctx, taskflowid):
     print('Terminating task flow:', taskflowid)
     resp = TaskflowsUtils(gc).terminateTaskflow(taskflowid)
 
+
 taskflows.add_command(taskflows_terminate)
+
 
 @click.command(
     'delete',
@@ -216,7 +224,9 @@ def taskflows_delete(ctx, taskflowid):
     print('Deleting task flow:', taskflowid)
     resp = TaskflowsUtils(gc).deleteTaskflow(taskflowid)
 
+
 taskflows.add_command(taskflows_delete)
+
 
 @click.command(
     'log',
@@ -238,7 +248,9 @@ def taskflows_log(ctx, taskflowid):
         logCount += 1
     print('**** Done printing log ****')
 
+
 taskflows.add_command(taskflows_log)
+
 
 @click.command(
     'status',
@@ -253,6 +265,7 @@ def taskflows_status(ctx, taskflowid):
     status = TaskflowsUtils(gc).status(taskflowid)
     print('taskflow:', taskflowid)
     print('status:', status)
+
 
 taskflows.add_command(taskflows_status)
 

@@ -8,11 +8,11 @@ from girder_client import HttpError
 class TaskflowsUtils:
     """Utility functions for sending taskflows requests to girder."""
 
-    TASKFLOWS_CREATE_PATH='/taskflows'
-    TASKFLOWS_GET_PATH='/taskflows/{id}'
-    TASKFLOWS_START_PATH='/taskflows/{id}/start'
-    TASKFLOWS_TERMINATE_PATH='/taskflows/{id}/terminate'
-    TASKFLOWS_DELETE_PATH='/taskflows/{id}'
+    TASKFLOWS_CREATE_PATH = '/taskflows'
+    TASKFLOWS_GET_PATH = '/taskflows/{id}'
+    TASKFLOWS_START_PATH = '/taskflows/{id}/start'
+    TASKFLOWS_TERMINATE_PATH = '/taskflows/{id}/terminate'
+    TASKFLOWS_DELETE_PATH = '/taskflows/{id}'
 
     def __init__(self, gc):
         """Initialize with an authenticated GirderClient object."""
@@ -35,7 +35,8 @@ class TaskflowsUtils:
 
     def terminateTaskflow(self, taskflowId):
         """Terminate a taskflow from its id."""
-        path = TaskflowsUtils.TASKFLOWS_TERMINATE_PATH.replace('{id}', taskflowId)
+        path = TaskflowsUtils.TASKFLOWS_TERMINATE_PATH.replace(
+            '{id}', taskflowId)
         return self.gc.put(path)
 
     def deleteTaskflow(self, taskflowId):
