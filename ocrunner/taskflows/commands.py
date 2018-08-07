@@ -2,6 +2,7 @@
 
 import click
 import json
+import logging
 
 from ocrunner.utilities.taskflows_utils import TaskflowsUtils
 
@@ -104,8 +105,8 @@ def taskflows_log(ctx, taskflowid):
     resp = TaskflowsUtils(gc).log(taskflowid)
     for log in resp:
         print('*** Log entry:', logCount, '***')
-        for entry in log.keys():
-            print(entry, ":", log[entry])
+        record = logging.makeLogRecord(log)
+        print(logging.Formatter().format(record))
         logCount += 1
     print('**** Done printing log ****')
 
