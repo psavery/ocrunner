@@ -8,6 +8,8 @@ from girder_client import HttpError
 class TaskflowsUtils:
     """Utility functions for sending taskflows requests to girder."""
 
+    TASKFLOWS_LIST_PATH = '/taskflows'
+    TASKFLOWS_LIST_ALL_PATH = '/taskflows/all'
     TASKFLOWS_CREATE_PATH = '/taskflows'
     TASKFLOWS_GET_PATH = '/taskflows/{id}'
     TASKFLOWS_START_PATH = '/taskflows/{id}/start'
@@ -17,6 +19,14 @@ class TaskflowsUtils:
     def __init__(self, gc):
         """Initialize with an authenticated GirderClient object."""
         self.gc = gc
+
+    def listTaskflows(self):
+        """List the taskflows for the current user."""
+        return self.gc.get(TaskflowsUtils.TASKFLOWS_LIST_PATH)
+
+    def listAllTaskflows(self):
+        """List all taskflows."""
+        return self.gc.get(TaskflowsUtils.TASKFLOWS_LIST_ALL_PATH)
 
     def createTaskflow(self, body):
         """Create a taskflow with a given body."""

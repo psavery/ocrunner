@@ -145,9 +145,27 @@ def taskflows(ctx):
     'ls',
     short_help='List running taskflows.',
     help='List running taskflows.')
+@click.option('--all', is_flag=True, default=False)
 @click.pass_context
-def taskflows_ls(ctx):
-    print('taskflows ls called!')
+def taskflows_ls(ctx, all):
+
+    gc = ctx.obj['gc']
+
+    if all:
+      taskflowsList = TaskflowsUtils(gc).listAllTaskflows()
+    else:
+      taskflowsList = TaskflowsUtils(gc).listTaskflows()
+
+    print('=' * 100)
+    print('{:28s} {:12s} {:60s}'.format('id', 'status', 'TaskFlowClass'))
+    print('=' * 100)
+    for taskflow in taskflowsList:
+        print(
+            '{:28s} {:12s} {:60s}'.format(
+                taskflow['_id'],
+                taskflow['status'],
+                taskflow['taskFlowClass']))
+
 
 
 taskflows.add_command(taskflows_ls)
