@@ -6,10 +6,11 @@ import sys
 import girder_client
 from girder_client import HttpError
 
-from ocrunner.utilities.clusters_utils import ClustersUtils
-from ocrunner.utilities.taskflows_utils import TaskflowsUtils
-from ocrunner.utilities.user_utils import UserUtils
 from ocrunner.utilities.progress_bar import progress_bar
+
+from ocrunner.clusters import commands as clusters_commands
+from ocrunner.jobs import commands as jobs_commands
+from ocrunner.taskflows import commands as taskflows_commands
 
 DEFAULT_API_URL = 'http://localhost:8080/api/v1'
 
@@ -76,59 +77,26 @@ def main(ctx, api_url, api_key):
     ctx.obj['gc'] = gc
 
 
-# Cluster command
+# Clusters command
 @main.group(
     'clusters',
-    short_help='Get information about the clusters.',
-    help='Get information about the clusters.')
+    short_help='Run commands for the clusters.',
+    help='Run commands for the clusters.')
 @click.pass_context
 def clusters(ctx):
     pass
 
-
-@click.command(
-    'ls',
-    short_help='List available clusters.',
-    help='List available clusters.')
-@click.pass_context
-def clusters_ls(ctx):
-    gc = ctx.obj['gc']
-    clustersList = ClustersUtils(gc).clusters()
-    print('=' * 72)
-    print('{:15s} {:28s} {:12s} {:15s}'.format('host', 'id', 'status', 'user'))
-    print('=' * 72)
-    for cluster in clustersList:
-        userId = cluster['userId']
-        user = UserUtils(gc).getUserLogin(userId)
-        print(
-            '{:15s} {:28s} {:12s} {:15s}'.format(
-                cluster['config']['host'],
-                cluster['_id'],
-                cluster['status'],
-                user))
-
-
-clusters.add_command(clusters_ls)
+clusters.add_command(clusters_commands.clusters_ls)
 
 
 # Jobs command
-@main.group('jobs', short_help='Get information about the jobs.',
-            help='Get information about the jobs.')
+@main.group('jobs', short_help='Run commands for the jobs.',
+            help='Run commands for the jobs.')
 @click.pass_context
 def jobs(ctx):
     pass
 
-
-@click.command(
-    'ls',
-    short_help='List running jobs.',
-    help='List running jobs.')
-@click.pass_context
-def jobs_ls(ctx):
-    print('Jobs ls called!')
-
-
-jobs.add_command(jobs_ls)
+jobs.add_command(jobs_commands.jobs_ls)
 
 
 # Taskflows command
@@ -140,152 +108,13 @@ jobs.add_command(jobs_ls)
 def taskflows(ctx):
     pass
 
-
-@click.command(
-    'ls',
-    short_help='List running taskflows.',
-    help='List running taskflows.')
-@click.option('--all', is_flag=True, default=False)
-@click.pass_context
-def taskflows_ls(ctx, all):
-
-    gc = ctx.obj['gc']
-
-    if all:
-      taskflowsList = TaskflowsUtils(gc).listAllTaskflows()
-    else:
-      taskflowsList = TaskflowsUtils(gc).listTaskflows()
-
-    print('=' * 100)
-    print('{:28s} {:12s} {:60s}'.format('id', 'status', 'TaskFlowClass'))
-    print('=' * 100)
-    for taskflow in taskflowsList:
-        print(
-            '{:28s} {:12s} {:60s}'.format(
-                taskflow['_id'],
-                taskflow['status'],
-                taskflow['taskFlowClass']))
-
-
-
-taskflows.add_command(taskflows_ls)
-
-
-@click.command(
-    'create',
-    short_help='Create a taskflow from an input json file.',
-    help='Create a taskflow from an input json file.')
-@click.argument('inputJsonFile')
-@click.pass_context
-def taskflows_create(ctx, inputjsonfile):
-
-    gc = ctx.obj['gc']
-
-    # Read the input file
-    with open(inputjsonfile, 'r') as rf:
-        body = json.load(rf)
-
-    resp = TaskflowsUtils(gc).createTaskflow(body)
-
-    print('Taskflow created')
-    print('id:', resp.get('_id'))
-    print('status:', resp.get('status'))
-
-
-taskflows.add_command(taskflows_create)
-
-
-@click.command(
-    'start',
-    short_help='Start a taskflow with a given id.',
-    help='Start a taskflow with a given id.')
-@click.argument('taskflowId')
-@click.pass_context
-def taskflows_start(ctx, taskflowid):
-
-    gc = ctx.obj['gc']
-
-    print('Starting task flow:', taskflowid)
-    resp = TaskflowsUtils(gc).startTaskflow(taskflowid)
-
-
-taskflows.add_command(taskflows_start)
-
-
-@click.command(
-    'terminate',
-    short_help='Terminate a taskflow with a given id.',
-    help='Terminate a taskflow with a given id.')
-@click.argument('taskflowId')
-@click.pass_context
-def taskflows_terminate(ctx, taskflowid):
-
-    gc = ctx.obj['gc']
-
-    print('Terminating task flow:', taskflowid)
-    resp = TaskflowsUtils(gc).terminateTaskflow(taskflowid)
-
-
-taskflows.add_command(taskflows_terminate)
-
-
-@click.command(
-    'delete',
-    short_help='Delete a taskflow with a given id.',
-    help='Delete a taskflow with a given id.')
-@click.argument('taskflowId')
-@click.pass_context
-def taskflows_delete(ctx, taskflowid):
-
-    gc = ctx.obj['gc']
-
-    print('Deleting task flow:', taskflowid)
-    resp = TaskflowsUtils(gc).deleteTaskflow(taskflowid)
-
-
-taskflows.add_command(taskflows_delete)
-
-
-@click.command(
-    'log',
-    short_help='Get the log of a taskflow with a given id.',
-    help='Get the log of a taskflow with a given id.')
-@click.argument('taskflowId')
-@click.pass_context
-def taskflows_log(ctx, taskflowid):
-
-    gc = ctx.obj['gc']
-
-    logCount = 1
-    print('**** Printing log for taskflow', taskflowid, '****')
-    resp = TaskflowsUtils(gc).log(taskflowid)
-    for log in resp:
-        print('*** Log entry:', logCount, '***')
-        for entry in log.keys():
-            print(entry, ":", log[entry])
-        logCount += 1
-    print('**** Done printing log ****')
-
-
-taskflows.add_command(taskflows_log)
-
-
-@click.command(
-    'status',
-    short_help='Get the status of a taskflow with a given id.',
-    help='Get the status of a taskflow with a given id.')
-@click.argument('taskflowId')
-@click.pass_context
-def taskflows_status(ctx, taskflowid):
-
-    gc = ctx.obj['gc']
-
-    status = TaskflowsUtils(gc).status(taskflowid)
-    print('taskflow:', taskflowid)
-    print('status:', status)
-
-
-taskflows.add_command(taskflows_status)
+taskflows.add_command(taskflows_commands.taskflows_ls)
+taskflows.add_command(taskflows_commands.taskflows_create)
+taskflows.add_command(taskflows_commands.taskflows_start)
+taskflows.add_command(taskflows_commands.taskflows_terminate)
+taskflows.add_command(taskflows_commands.taskflows_delete)
+taskflows.add_command(taskflows_commands.taskflows_log)
+taskflows.add_command(taskflows_commands.taskflows_status)
 
 if __name__ == '__main__':
     main()
