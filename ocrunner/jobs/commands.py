@@ -13,4 +13,12 @@ from ocrunner.utilities.jobs_utils import JobsUtils
 def jobs_ls(ctx):
     gc = ctx.obj['gc']
     jobsList = JobsUtils(gc).listJobs()
-    print(jobsList)
+    print('=' * 68)
+    print('{:28s} {:20s} {:30s}'.format('jobId', 'name', 'status'))
+    print('=' * 68)
+    for job in jobsList:
+        print(
+            '{:28s} {:20s} {:30s}'.format(
+                job['_id'],
+                job['name'],
+                job['status']))
