@@ -83,7 +83,6 @@ def taskflows_terminate(ctx, taskflowid):
 @click.argument('taskflowId')
 @click.pass_context
 def taskflows_delete(ctx, taskflowid):
-
     gc = ctx.obj['gc']
 
     print('Deleting task flow:', taskflowid)
@@ -97,7 +96,6 @@ def taskflows_delete(ctx, taskflowid):
 @click.argument('taskflowId')
 @click.pass_context
 def taskflows_log(ctx, taskflowid):
-
     gc = ctx.obj['gc']
 
     logCount = 1
@@ -118,9 +116,37 @@ def taskflows_log(ctx, taskflowid):
 @click.argument('taskflowId')
 @click.pass_context
 def taskflows_status(ctx, taskflowid):
-
     gc = ctx.obj['gc']
 
     status = TaskflowsUtils(gc).status(taskflowid)
     print('taskflow:', taskflowid)
     print('status:', status)
+
+
+@click.command(
+    'jobs',
+    short_help='List the jobs for a given taskflow.',
+    help='List the jobs for a given taskflow.')
+@click.argument('taskflowId')
+@click.pass_context
+def taskflows_jobs(ctx, taskflowid):
+    gc = ctx.obj['gc']
+
+    taskFlowInfo = TaskflowsUtils(gc).getTaskflow(taskflowid)
+
+    # The jobs are in the meta data
+    metaData = taskFlowInfo.get("meta")
+    if not metaData:
+        print("Error: meta data not present in taskflow!")
+        return
+
+    jobsList = metaData.get("jobs")
+    print('=' * 68)
+    print('{:28s} {:20s} {:30s}'.format('jobId', 'name', 'status'))
+    print('=' * 68)
+    for job in jobsList:
+        print(
+            '{:28s} {:20s} {:30s}'.format(
+                job['_id'],
+                job['name'],
+                job['status']))

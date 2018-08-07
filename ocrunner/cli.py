@@ -115,6 +115,7 @@ taskflows.add_command(taskflows_commands.taskflows_terminate)
 taskflows.add_command(taskflows_commands.taskflows_delete)
 taskflows.add_command(taskflows_commands.taskflows_log)
 taskflows.add_command(taskflows_commands.taskflows_status)
+taskflows.add_command(taskflows_commands.taskflows_jobs)
 
 if __name__ == '__main__':
     main()
