@@ -38,10 +38,10 @@ class TaskflowsUtils:
         path = TaskflowsUtils.TASKFLOWS_GET_PATH.replace('{id}', taskflowId)
         return self.gc.get(path)
 
-    def startTaskflow(self, taskflowId):
-        """Start a taskflow from its id."""
+    def startTaskflow(self, taskflowId, body):
+        """Start a taskflow from its id and a given body."""
         path = TaskflowsUtils.TASKFLOWS_START_PATH.replace('{id}', taskflowId)
-        return self.gc.put(path)
+        return self.gc.put(path, data=json.dumps(body))
 
     def terminateTaskflow(self, taskflowId):
         """Terminate a taskflow from its id."""

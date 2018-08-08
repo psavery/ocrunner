@@ -57,12 +57,17 @@ def taskflows_create(ctx, inputjsonfile):
     short_help='Start a taskflow with a given id.',
     help='Start a taskflow with a given id.')
 @click.argument('taskflowId')
+@click.argument('inputJsonFile')
 @click.pass_context
-def taskflows_start(ctx, taskflowid):
+def taskflows_start(ctx, taskflowid, inputjsonfile):
     gc = ctx.obj['gc']
 
+    # Read the input file
+    with open(inputjsonfile, 'r') as rf:
+        body = json.load(rf)
+
     print('Starting task flow:', taskflowid)
-    resp = TaskflowsUtils(gc).startTaskflow(taskflowid)
+    resp = TaskflowsUtils(gc).startTaskflow(taskflowid, body)
 
 
 @click.command(
